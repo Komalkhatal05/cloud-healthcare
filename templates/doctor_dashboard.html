@@ -1,14 +1,316 @@
+cat > templates/doctor_dashboard.html <<'EOF'
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Doctor Dashboard</title>
-</head>
-<body>
-    <h1>Doctor Dashboard</h1>
-    <h2>Welcome {{ username }}</h2>
+<html lang="en">
 
-    <p>View Patients</p>
-    <p>Manage Appointments</p>
-    <p>View Medical Records</p>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Doctor Dashboard</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f1f5f9;
+}
+
+.header {
+    background: #0f172a;
+    color: white;
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.logout {
+    background: #dc2626;
+    padding: 10px 18px;
+    color: white;
+    text-decoration: none;
+    border-radius: 7px;
+}
+
+.container {
+    padding: 30px;
+}
+
+h1 {
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #64748b;
+    margin-bottom: 25px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.card p {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.blue {
+    color: #2563eb;
+}
+
+.orange {
+    color: #ea580c;
+}
+
+.green {
+    color: #16a34a;
+}
+
+.section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+}
+
+.section h2 {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 13px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+th {
+    background: #f8fafc;
+}
+
+@media(max-width: 700px) {
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+<div class="logo">
+🏥 Healthcare Cloud | Doctor
+</div>
+
+<div>
+
+Dr. {{ session.get('username') }}
+
+<a class="logout" href="{{ url_for('logout') }}">
+Logout
+</a>
+
+</div>
+
+</header>
+
+
+<main class="container">
+
+<h1>Doctor Dashboard</h1>
+
+<p class="subtitle">
+Patient and appointment management
+</p>
+
+
+<div class="cards">
+
+<div class="card">
+
+<h3>Total Patients</h3>
+
+<p class="blue">
+{{ patients|length }}
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>Appointments</h3>
+
+<p class="orange">
+{{ appointments|length }}
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>System</h3>
+
+<p class="green">
+Online
+</p>
+
+</div>
+
+</div>
+
+
+<section class="section">
+
+<h2>👥 Patient Records</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Age</th>
+<th>Gender</th>
+<th>Disease</th>
+<th>Phone</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for patient in patients %}
+
+<tr>
+
+<td>{{ patient.id }}</td>
+<td>{{ patient.name }}</td>
+<td>{{ patient.age }}</td>
+<td>{{ patient.gender }}</td>
+<td>{{ patient.disease }}</td>
+<td>{{ patient.phone }}</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="6">
+No patient records available.
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</section>
+
+
+<section class="section">
+
+<h2>📅 Appointments</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Patient</th>
+<th>Doctor</th>
+<th>Date</th>
+<th>Reason</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for appointment in appointments %}
+
+<tr>
+
+<td>{{ appointment.id }}</td>
+<td>{{ appointment.patient_name }}</td>
+<td>{{ appointment.doctor_name }}</td>
+<td>{{ appointment.appointment_date }}</td>
+<td>{{ appointment.reason }}</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="5">
+No appointments available.
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</section>
+
+</main>
+
 </body>
+
 </html>
+EOF
